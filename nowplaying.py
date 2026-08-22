@@ -1,7 +1,7 @@
 """
-Video ke thumbnail ke upar ek chhota music-player jaisa overlay banata hai
-(title + progress bar) — screenshot mein dikhne wale "now playing" card jaisa.
-Yeh sirf ek static image hai; asli controls neeche wale inline buttons hain.
+Creates a small music-player-like overlay on top of the video's thumbnail
+(title + progress bar) — similar to the "now playing" card seen in screenshots.
+This is just a static image; the actual controls are the inline buttons below.
 """
 
 import io
@@ -41,19 +41,19 @@ async def _download_image(url: str) -> "Image.Image | None":
 
 
 async def generate_now_playing_card(thumbnail_url: str, title: str, duration_str: str) -> "io.BytesIO | None":
-    """Returns a BytesIO PNG buffer, ya None agar generate nahi ho paaya (fallback ke liye)."""
+    """Returns a BytesIO PNG buffer, or None if it could not be generated (for fallback)."""
     base = await _download_image(thumbnail_url)
     if base is None:
         return None
 
     try:
         W, H = 900, 500
-        # background: blurred + darkened thumbnail, full bleed
+        # Background: blurred + darkened thumbnail, full bleed
         bg = base.resize((W, H)).filter(ImageFilter.GaussianBlur(8))
         overlay = Image.new("RGB", (W, H), (0, 0, 0))
         bg = Image.blend(bg, overlay, 0.35)
 
-        # foreground: sharp thumbnail card, centered
+        # Foreground: sharp thumbnail card, centered
         card_w, card_h = 620, 300
         fg = base.copy()
         fw, fh = fg.size
@@ -74,13 +74,13 @@ async def generate_now_playing_card(thumbnail_url: str, title: str, duration_str
 
         draw = ImageDraw.Draw(bg, "RGBA")
 
-        # rounded border around thumbnail card
+        # Rounded border around thumbnail card
         draw.rectangle(
             [card_x, card_y, card_x + card_w, card_y + card_h],
             outline=(255, 255, 255, 180), width=3,
         )
 
-        # bottom info panel
+        # Bottom info panel
         panel_y = card_y + card_h + 20
         title_font = _load_font(28)
         small_font = _load_font(18)
@@ -88,7 +88,7 @@ async def generate_now_playing_card(thumbnail_url: str, title: str, duration_str
         display_title = title if len(title) <= 45 else title[:42] + "..."
         draw.text((card_x, panel_y), display_title, font=title_font, fill=(255, 255, 255, 255))
 
-        # progress bar
+        # Progress bar
         bar_y = panel_y + 55
         bar_x0, bar_x1 = card_x, card_x + card_w
         draw.line([(bar_x0, bar_y), (bar_x1, bar_y)], fill=(255, 255, 255, 90), width=6)
@@ -99,7 +99,7 @@ async def generate_now_playing_card(thumbnail_url: str, title: str, duration_str
         dw = draw.textlength(dur_text, font=small_font)
         draw.text((bar_x1 - dw, bar_y + 15), dur_text, font=small_font, fill=(230, 230, 230, 255))
 
-        # simple control glyphs (decorative only)
+        # Simple control glyphs (decorative only)
         controls = "⏮   ⏯   ⏭   🔁"
         cf = _load_font(30)
         cw = draw.textlength(controls, font=cf)

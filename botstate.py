@@ -1,11 +1,11 @@
 """
-Bot ka global ON/OFF switch — sirf OWNER_ID `/on` aur `/off` command se
-control karta hai. Jab OFF hota hai to bot kisi bhi message ya button ka
-jawab nahi deta (sirf `/on` / `/off` chalte rehte hain).
+The bot's global ON/OFF switch — controlled only by the OWNER_ID via 
+`/on` and `/off` commands[span_0](start_span)[span_0](end_span). When OFF, the bot does not respond to 
+any message or button (only `/on` and `/off` continue to work)[span_1](start_span)[span_1](end_span).
 
-Fast in-memory cache use hota hai (har message par DB call na karna pade),
-lekin state DB mein bhi persist hota hai (dekho db.py: set_bot_status /
-get_bot_status) — isliye restart ke baad bhi yaad rehta hai.
+Fast in-memory cache is used (so a DB call isn't needed on every message), 
+but the state is also persisted in the DB (see db.py: set_bot_status / 
+get_bot_status) — so it is remembered even after a restart[span_2](start_span)[span_2](end_span).
 """
 
 _enabled = True

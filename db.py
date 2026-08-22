@@ -44,9 +44,9 @@ async def get_all_chats():
 
 
 # ---------------------------------------------------------------------------
-# /start message ke saath jaane wala media
-# — private chat ke liye: owner /addvd /delvd
-# — group chat ke liye: owner /addvd2 /delvd2
+# Media sent along with the /start message
+# — for private chat: owner /addvd /delvd[span_1](start_span)[span_1](end_span)
+# — for group chat: owner /addvd2 /delvd2[span_2](start_span)[span_2](end_span)
 # ---------------------------------------------------------------------------
 async def _set_media(key: str, file_id: str, media_type: str):
     try:
@@ -102,8 +102,8 @@ async def delete_group_start_media():
 
 
 # ---------------------------------------------------------------------------
-# Bot ka global ON/OFF status (owner: /on /off) — restart ke baad bhi yaad
-# rehta hai, kyunki yeh DB mein persist hota hai.
+# Bot's global ON/OFF status (owner: /on /off) — is remembered even after 
+# a restart because it persists in the database[span_3](start_span)[span_3](end_span).
 # ---------------------------------------------------------------------------
 async def set_bot_status(is_on: bool):
     try:
@@ -129,8 +129,8 @@ async def get_bot_status() -> bool:
 
 # ---------------------------------------------------------------------------
 # Per-chat AUTOPLAY setting (Now Playing -> ⚙️ Bot Settings -> Toggle Autoplay)
-# ON hone par queue khatam hone ke baad bhi bot khud related agla gaana bajata
-# rehta hai — bilkul youtube ke autoplay jaisa.
+# When ON, even after the queue ends, the bot automatically keeps playing 
+# the next related song — just like YouTube's autoplay feature[span_4](start_span)[span_4](end_span).
 # ---------------------------------------------------------------------------
 AUTOPLAY_KEY = "autoplay"
 

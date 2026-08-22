@@ -12,7 +12,7 @@ import db
 import botstate
 from clients import bot, assistant, call_py, LOGGER
 
-# Handlers register karne ke liye import karna zaroori hai
+# Import is necessary to register handlers
 import play  # noqa: F401
 
 web = FastAPI()
@@ -29,13 +29,13 @@ def run_web():
 
 async def keep_alive():
     """
-    Render free web services 15 min inactivity ke baad sula deta hai.
-    Isliye bot khud apne hi URL ko periodically ping karta rehta hai taaki
-    process kabhi offline na ho. RENDER_EXTERNAL_URL Render khud provide
-    karta hai deploy ke time, isko manually set karne ki zaroorat nahi.
+    Render puts free web services to sleep after 15 minutes of inactivity.
+    Therefore, the bot periodically pings its own URL so that the process 
+    never goes offline. Render provides RENDER_EXTERNAL_URL automatically 
+    during deployment, there is no need to set it manually.
     """
     if not config.RENDER_EXTERNAL_URL:
-        LOGGER.info("RENDER_EXTERNAL_URL set nahi hai — keep-alive ping skip ho raha hai.")
+        LOGGER.info("RENDER_EXTERNAL_URL is not set — keep-alive ping is being skipped.")
         return
 
     async with aiohttp.ClientSession() as session:
@@ -45,29 +45,29 @@ async def keep_alive():
                     LOGGER.info(f"Keep-alive ping: {resp.status}")
             except Exception as e:
                 LOGGER.warning(f"Keep-alive ping fail: {e}")
-            # Pehle ping turant, uske baad har PING_INTERVAL seconds par —
-            # Render free tier ~15 min inactivity ke baad sula deta hai, isliye
-            # start hote hi ping zaroori hai, sirf sleep ke baad nahi.
+            # First ping immediately, followed by every PING_INTERVAL seconds — 
+            # Render free tier puts services to sleep after ~15 min inactivity, 
+            # so an immediate ping on startup is necessary, not just after sleep.
             await asyncio.sleep(config.PING_INTERVAL)
 
 
 async def register_bot_commands():
-    """Bot commands set karta hai taaki group mein '/' likhne par menu dikhe."""
+    """Sets bot commands so that the menu appears when typing '/' in a group."""
     try:
         await bot.set_bot_commands(
             [
-                BotCommand("start", "Bot ko start karo"),
-                BotCommand("play", "Gaana bajao"),
-                BotCommand("skip", "Agla gaana"),
-                BotCommand("pause", "Pause karo"),
-                BotCommand("resume", "Resume karo"),
-                BotCommand("stop", "Band karo"),
-                BotCommand("reload", "Bot ko refresh karo (admin only)"),
-                BotCommand("id", "Apni/group ki ID dekho"),
+                BotCommand("start", "Start the bot"),
+                BotCommand("play", "Play a song"),
+                BotCommand("skip", "Skip to next song"),
+                BotCommand("pause", "Pause the song"),
+                BotCommand("resume", "Resume the song"),
+                BotCommand("stop", "Stop the song"),
+                BotCommand("reload", "Refresh the bot (admin only)"),
+                BotCommand("id", "Check your/group ID"),
             ]
         )
     except Exception as e:
-        LOGGER.warning(f"Bot commands set nahi ho paye: {e}")
+        LOGGER.warning(f"Could not set bot commands: {e}")
 
 
 async def _run_once():
@@ -77,35 +77,34 @@ async def _run_once():
     await assistant.start()
     LOGGER.info("✅ Assistant started")
 
-    # IMPORTANT: assistant ke dialogs ek baar fetch kar lo taaki pyrogram
-    # har group/channel ka peer + access_hash cache kar le. Isके bina
-    # thodi der baad "ValueError: Peer id invalid: ..." aata hai jab
-    # bot change_stream/leave_group_call try karta hai kisi aise chat par
-    # jiska peer assistant ke local cache mein nahi hai.
+    # IMPORTANT: Fetch assistant dialogs once so that pyrogram caches the peer + access_hash 
+    # for every group/channel. Without this, "ValueError: Peer id invalid: ..." occurs later 
+    # when the bot tries change_stream/leave_group_call on a chat whose peer is not 
+    # in the assistant's local cache.
     try:
         async for _ in assistant.get_dialogs():
             pass
         LOGGER.info("✅ Assistant peers cached")
     except Exception as e:
-        LOGGER.warning(f"Dialogs cache karne mein error: {e}")
+        LOGGER.warning(f"Error caching dialogs: {e}")
 
     await call_py.start()
-    LOGGER.info("✅ PyTgCalls started — ab bot music bajane ke liye taiyar hai")
+    LOGGER.info("✅ PyTgCalls started — the bot is now ready to play music")
 
-    # Owner ke /on /off se pichhli baar jo status set kiya tha, wahi load karo
+    # Load the status previously set by the owner's /on /off commands
     try:
         botstate.set_enabled(await db.get_bot_status())
         LOGGER.info(f"✅ Bot status loaded: {'ON' if botstate.is_enabled() else 'OFF'}")
     except Exception as e:
-        LOGGER.warning(f"Bot status load nahi ho paya, default ON rakh rahe hain: {e}")
+        LOGGER.warning(f"Could not load bot status, keeping default ON: {e}")
 
     await register_bot_commands()
 
     if config.LOG_GROUP_ID:
         try:
-            await bot.send_message(config.LOG_GROUP_ID, "✅ Bot restart ho gaya hai aur ab online hai.")
+            await bot.send_message(config.LOG_GROUP_ID, "✅ Bot has restarted and is now online.")
         except Exception as e:
-            LOGGER.warning(f"Log group mein message nahi bhej paya: {e}")
+            LOGGER.warning(f"Could not send message to log group: {e}")
 
     keep_alive_task = asyncio.create_task(keep_alive())
 
@@ -126,17 +125,16 @@ async def _run_once():
 
 async def main():
     """
-    _run_once() ko wrap karta hai taaki koi bhi unexpected crash (network
-    drop, connection reset, etc.) permanently bot ko offline na kar de —
-    thodi der baad process khud ko restart kar leta hai, jab tak Render
-    khud process kill na kare.
+    Wraps _run_once() so that any unexpected crash (network drop, connection reset, etc.) 
+    doesn't permanently take the bot offline — the process restarts itself after a short delay 
+    unless Render kills the process itself.
     """
     while True:
         try:
             await _run_once()
-            break  # idle() sirf tabhi return karta hai jab process ko normally stop kiya jaaye
+            break  # idle() only returns when the process is normally stopped
         except Exception as e:
-            LOGGER.error(f"Bot crash ho gaya, 10 second mein restart kar raha hoon: {e}")
+            LOGGER.error(f"Bot crashed, restarting in 10 seconds: {e}")
             await asyncio.sleep(10)
 
 

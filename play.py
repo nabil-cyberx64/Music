@@ -286,7 +286,7 @@ async def _edit_body(cq_message, text: str, reply_markup):
 
 
 HELP_TEXT = (
-    "🦋 **ᴀᴠᴀɪʟᴀʙʟᴇ ᴄᴏᴍᴍᴀɴᴅs**\n\n"
+    "🦋 **AVAILABLE COMMANDS**\n\n"
     "`/play <song>` — song play command\n"
     "`/skip` — skip song _(admin only)_\n"
     "`/pause` — pause song _(admin only)_\n"
@@ -294,7 +294,7 @@ HELP_TEXT = (
     "`/stop` — stop song _(admin only)_\n"
     "`/reload` — bot refresh _(admin only)_\n"
     "⏪ -10s / +10s ⏩ — _(admin or requester)_\n"
-    "⚙️ ʙᴏᴛ sᴇᴛᴛɪɴɢs — autoplay on/off_(admin or requester)_\n"
+    "⚙️ BOT SETTINGS — autoplay on/off_(admin or requester)_\n"
     "`/id` — check your group id"
 )
 
@@ -303,32 +303,32 @@ def _welcome_text(user_name: str, user_id: int, bot_name: str, bot_username: str
     user_tag = f"[{smallcaps_title(user_name)}](tg://user?id={user_id})"
     bot_tag = f"[{fancy_italic(bot_name)}](https://t.me/{bot_username})"
     body = (
-        f"🦋 ᴡᴇʟᴄᴏᴍᴇ ᴛᴏ {bot_tag}\n"
-        f"ᴘʀᴇᴍɪᴜᴍ  ᴀᴅ-ꜰʀᴇᴇ ✧ ᴜʟᴛʀᴀ sᴍᴏᴏᴛʜ\n\n"
-        f"🦋 ʜɪɢʜ • Qᴜᴀʟɪᴛʏ • ᴍᴜsɪᴄ • ʙᴏᴛ\n"
-        f"ғᴏʀ ᴛᴇʟᴇɢʀᴀᴍ ɢʀᴏᴜᴘs & ᴄʜᴀɴɴᴇls\n\n"
-        f"🦋 ɪɴsᴛᴀɴᴛ sᴛʀᴇᴀᴍɪɴɢ\n"
-        f"🦋 ᴜʟᴛʀᴀ sᴍᴏᴏᴛʜ ᴘʟᴀʏʙᴀᴄᴋ\n"
-        f"🦋 ᴄʀʏsᴛᴀʟ ᴄʟᴇᴀʀ sᴏᴜɴᴅ • ɴᴏ ʟᴀɢ\n\n"
-        f"🦋 ᴛᴀᴘ ʜᴇʟᴘ ᴛᴏ ᴠɪᴇᴡ ᴀʟʟ ᴄᴏᴍᴍᴀɴᴅs\n\n"
-        f"🦋ᴘᴏᴡᴇʀᴇᴅ ʙʏ : [Aᴅɪᴛʏᴀ × Aᴘɪꜱ](https://t.me/AdityaXzexxyAPI)\n\n"
+        f"🦋 WELCOME TO {bot_tag}\n"
+        f"PREMIUM  AD-FREE ✧ ULTRA SMOOTH\n\n"
+        f"🦋 HIGH • QUALITY • MUSIC • BOT\n"
+        f"FOR TELEGRAM GROUPS & CHANNELS\n\n"
+        f"🦋 INSTANT STREAMING\n"
+        f"🦋 ULTRA SMOOTH PLAYBACK\n"
+        f"🦋 CRYSTAL CLEAR SOUND • NO LAG\n\n"
+        f"🦋 TAP HELP TO VIEW ALL COMMANDS\n\n"
+        f"🦋POWERED BY : [Aditya × APIs](https://t.me/AdityaXzexxyAPI)\n\n"
         f"╭─────────────  ─────────────╮\n"
-        f" ᴇɴᴊᴏʏ ᴛʜᴇ ᴍᴜsɪᴄ\n"
+        f" ENJOY THE MUSIC\n"
         f"╰─────────────  ─────────────╯"
     )
-    return f"🦋 ʜᴇʏ {user_tag}..!!!\n\n" + expandable_quote(body)
+    return f"🦋 HEY {user_tag}..!!!\n\n" + expandable_quote(body)
 
 
 def _group_start_text(bot_name: str) -> str:
     """Group start message with quick info regarding the music bot."""
-    return f"✨ {fancy_italic(bot_name)} ɪs ᴏɴʟɪɴᴇ ᴀɴᴅ ʀᴇᴀᴅʏ ✨\n\n" + expandable_quote(
-        "🎧 ᴍᴜsɪᴄ ᴘᴀɴᴇʟ\n"
-        "➤ /play <sᴏɴɢ ɴᴀᴍᴇ> — play song\n"
+    return f"✨ {fancy_italic(bot_name)} IS ONLINE AND READY ✨\n\n" + expandable_quote(
+        "🎧 MUSIC PANEL\n"
+        "➤ /play <SONG NAME> — play song\n"
         "➤ /skip • /pause • /resume • /stop\n"
         "➤ /queue — list of upcoming songs\n"
         "➤ /autoplayon • /autoplayoff\n\n"
-        "⌾ ᴄᴏɴᴛʀᴏʟ : ᴀᴅᴍɪɴs ᴀɴᴅ ʀᴇǫᴜᴇsᴛᴇʀ ᴏɴʟʏ\n"
-        "⌾ ǫᴜᴀʟɪᴛʏ : ʜɪɢʜ ᴅᴇғɪɴɪᴛɪᴏɴ ᴀᴜᴅɪᴏ\n\n"
+        "⌾ CONTROL : ADMINS AND REQUESTER ONLY\n"
+        "⌾ QUALITY : HIGH DEFINITION AUDIO\n\n"
         "•────────────────"
     )
 
@@ -402,9 +402,9 @@ async def added_to_group(client, message: Message):
     adder = message.from_user.first_name if message.from_user else "there"
 
     await message.reply_text(
-        f"🎉 ʜᴇʏ **{adder}**!\n\n"
-        f"ᴛʜᴀɴᴋ ʏᴏᴜ ғᴏʀ ᴀᴅᴅɪɴɢ **[{me.first_name}](https://t.me/{me.username})** ɪɴ {message.chat.title}.\n\n"
-        f"🎶 **{me.first_name}** ɪs ɴᴏᴡ ʀᴇᴀᴅʏ ᴛᴏ sᴛʀᴇᴀᴍ ᴍᴜsɪᴄ, ᴍᴀɴᴀɢᴇ ᴄʜᴀᴛs ᴀɴᴅ ᴅᴇʟɪᴠᴇʀ ᴛʜᴇ ʙᴇsᴛ ᴇxᴘᴇʀɪᴇɴᴄᴇ.",
+        f"🎉 HEY **{adder}**!\n\n"
+        f"THANK YOU FOR ADDING **[{me.first_name}](https://t.me/{me.username})** IN {message.chat.title}.\n\n"
+        f"🎶 **{me.first_name}** IS NOW READY TO STREAM MUSIC, MANAGE CHATS AND DELIVER THE BEST EXPERIENCE.",
         reply_markup=_start_keyboard(me.username),
         disable_web_page_preview=True,
     )
@@ -437,7 +437,6 @@ async def play_command(client, message: Message):
 
     track = await search_track(query)
     if not track:
-        # FIXED: Fixed the unterminated string literal error here by putting it on a single line
         return await status.edit_text(f"❌ {smallcaps_title('nothing searched Try another name')}.")
 
     # New API downloads the song — takes some time, so we wait until it's ready (max 3 minutes).
@@ -466,7 +465,7 @@ async def play_command(client, message: Message):
         await message.reply_text(
             f"🎵 {smallcaps_title('added to queue at')} #{position}\n"
             f"📝 {smallcaps_title('title')} : {track['title']}\n"
-            f"🕐 {smallcaps_title('duration')} : {track['duration']} ᴍɪɴᴜᴛᴇs\n"
+            f"🕐 {smallcaps_title('duration')} : {track['duration']} MINUTES\n"
             f"👤 {smallcaps_title('requested')} : {requester}"
         )
         return

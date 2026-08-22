@@ -14,15 +14,15 @@ logging.getLogger("pyrogram").setLevel(logging.WARNING)
 logging.getLogger("pytgcalls").setLevel(logging.WARNING)
 
 # ---------------------------------------------------------------------------
-# Compatibility shim: py-tgcalls==0.9.7 (bahut purana) ka raw-update handler
-# yeh assume karta hai ki UpdateGroupCall object ke paas seedha `.chat_id`
-# attribute hota hai (data2[update.chat_id]). Naye kurigram/pyrogram schema
-# mein yeh field hata diya gaya — ab sirf `.peer` (PeerChat/PeerChannel)
-# milta hai. Isi wajah se ye error aata tha:
+# Compatibility shim: raw-update handler for py-tgcalls==0.9.7 (very old)
+# assumes that the UpdateGroupCall object has a direct `.chat_id` 
+# attribute (data2[update.chat_id]). In newer kurigram/pyrogram schemas, 
+# this field was removed — now only `.peer` (PeerChat/PeerChannel) 
+# is available. Because of this, the following error used to occur:
 #   AttributeError: 'UpdateGroupCall' object has no attribute 'chat_id'
-# Yeh patch `.chat_id` ko ek computed property bana deta hai jo `.peer` se
-# nikal ke wahi purana behaviour de deta hai — bina py-tgcalls ya kurigram
-# ka version chede.
+# This patch makes `.chat_id` a computed property that extracts it 
+# from `.peer` to provide the exact same old behavior — without 
+# modifying py-tgcalls or kurigram version.
 # ---------------------------------------------------------------------------
 try:
     from pyrogram.raw.types import UpdateGroupCall, PeerChat, PeerChannel
@@ -40,14 +40,14 @@ try:
         logging.getLogger("MusicBot").info(
             "✅ UpdateGroupCall.chat_id compatibility shim applied"
         )
-except Exception as _shim_err:  # kabhi bhi patch fail ho to bot crash na ho
+except Exception as _shim_err:  # Bot should not crash if patch ever fails
     logging.getLogger("MusicBot").warning(
-        f"⚠️ UpdateGroupCall compatibility shim skip ho gaya: {_shim_err}"
+        f"⚠️ UpdateGroupCall compatibility shim skipped: {_shim_err}"
     )
 
 LOGGER = logging.getLogger("MusicBot")
 
-# Process shuru hone ka time — group start message mein uptime dikhane ke liye
+# Process start time — to display uptime in the start message
 START_TIME = time.monotonic()
 
 bot = Client(

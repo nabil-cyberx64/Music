@@ -1,21 +1,20 @@
 """
-Har group mein music play karne se pehle assistant (userbot) account ka
-wahan hona zaroori hai — VC join wahi karta hai, bot nahi.
+Before playing music in any group, the assistant (userbot) account 
+must be present there — the assistant joins the VC, not the bot.
 
-Yeh module check karta hai ki assistant already group mein hai ya nahi, aur
-agar nahi hai to khud-ba-khud join karwane ki koshish karta hai:
+This module checks whether the assistant is already in the group or not, and 
+if not, attempts to make it join automatically:
 
-  1. Agar group public hai (username wala) -> assistant seedha us
-     username se join kar leta hai.
-  2. Agar group private hai -> bot (jo already group mein hai) ek invite
-     link nikalta hai aur assistant usse join karta hai.
-  3. Last resort -> bot khud assistant ko member ke roop mein add karne ki
-     koshish karta hai (isके liye bot ke paas "invite users" admin right
-     chahiye).
+  1. If the group is public (has a username) -> the assistant directly joins 
+     using that username[span_1](start_span)[span_1](end_span).
+  2. If the group is private -> the bot (which is already in the group) creates 
+     an invite link and the assistant joins using it[span_2](start_span)[span_2](end_span).
+  3. Last resort -> the bot tries to add the assistant as a member itself 
+     (for this, the bot needs "invite users" admin rights)[span_3](start_span)[span_3](end_span).
 
-Teeno fail ho jayein (jaise bot khud admin nahi hai, ya assistant ka privacy
-setting block kar rahi hai) to caller ko bataya jaata hai ki manually
-@ASSISTANT_USERNAME ko group mein add/join karwao.
+If all three fail (e.g., the bot itself is not an admin, or the assistant's privacy 
+settings are blocking it), the caller is informed to manually add/join 
+@ASSISTANT_USERNAME to the group[span_4](start_span)[span_4](end_span).
 """
 
 from pyrogram.errors import (
@@ -31,7 +30,7 @@ from clients import bot, assistant, LOGGER
 
 
 async def is_assistant_in_chat(chat_id: int) -> bool:
-    """Assistant is chat ka member hai ya nahi, seedha check karta hai."""
+    """Directly checks whether the assistant is a member of this chat or not[span_5](start_span)[span_5](end_span)."""
     try:
         await assistant.get_chat_member(chat_id, "me")
         return True
@@ -44,13 +43,13 @@ async def is_assistant_in_chat(chat_id: int) -> bool:
 
 async def ensure_assistant_in_chat(chat_id: int):
     """
-    Assistant chat mein hai ya nahi confirm karta hai, aur agar nahi hai to
-    join karwane ki poori koshish karta hai.
+    Confirms whether the assistant is in the chat, and if not, 
+    makes every effort to get it to join[span_6](start_span)[span_6](end_span).
 
     Returns: (joined: bool, reason: str)
-        joined=True  -> assistant ab chat mein hai, VC join kiya jaa sakta hai.
-        joined=False -> nahi ho paya; `reason` batata hai kyun (caller isse
-                         user-facing message banane ke liye use kar sakta hai).
+        joined=True  -> assistant is now in chat, VC can be joined[span_7](start_span)[span_7](end_span).
+        joined=False -> could not join; `reason` explains why (caller can use 
+                         this to build a user-facing message)[span_8](start_span)[span_8](end_span).
     """
     if await is_assistant_in_chat(chat_id):
         return True, ""
@@ -58,14 +57,14 @@ async def ensure_assistant_in_chat(chat_id: int):
     try:
         chat = await bot.get_chat(chat_id)
     except Exception as e:
-        LOGGER.warning(f"get_chat fail (assistant join se pehle): {e}")
+        LOGGER.warning(f"get_chat fail (before assistant join): {e}")
         chat = None
 
-    # --- Try 1: public group -> username se seedha join ---------------
+    # --- Try 1: public group -> join directly using username ---------------
     if chat and chat.username:
         try:
             await assistant.join_chat(chat.username)
-            LOGGER.info(f"Assistant public group @{chat.username} mein join ho gaya.")
+            LOGGER.info(f"Assistant joined public group @{chat.username}.")
             return True, ""
         except UserAlreadyParticipant:
             return True, ""
@@ -75,7 +74,7 @@ async def ensure_assistant_in_chat(chat_id: int):
         except RPCError as e:
             LOGGER.warning(f"Assistant username join fail: {e}")
 
-    # --- Try 2: private group -> bot invite link banaye, assistant use join kare
+    # --- Try 2: private group -> bot creates invite link, assistant joins it
     try:
         link = getattr(chat, "invite_link", None) if chat else None
         if not link:
@@ -83,25 +82,25 @@ async def ensure_assistant_in_chat(chat_id: int):
         if link:
             try:
                 await assistant.join_chat(link)
-                LOGGER.info(f"Assistant invite link se chat {chat_id} mein join ho gaya.")
+                LOGGER.info(f"Assistant joined chat {chat_id} via invite link.")
                 return True, ""
             except UserAlreadyParticipant:
                 return True, ""
     except ChatAdminRequired:
-        LOGGER.warning("Bot admin nahi hai — invite link export nahi ho paya.")
+        LOGGER.warning("Bot is not an admin — could not export invite link.")
     except FloodWait as e:
         LOGGER.warning(f"Assistant join FloodWait: {e.value}s")
         return False, "flood_wait"
     except Exception as e:
         LOGGER.warning(f"Assistant invite-link join fail: {e}")
 
-    # --- Try 3: bot khud assistant ko group mein add kare (agar right ho)
+    # --- Try 3: bot adds the assistant to the group itself (if rights permit)
     try:
         me_assistant = await assistant.get_me()
         await bot.add_chat_members(chat_id, me_assistant.id)
-        # add_chat_members turant confirm nahi karta, isliye dobara verify karo
+        # add_chat_members does not confirm instantly, so verify again
         if await is_assistant_in_chat(chat_id):
-            LOGGER.info(f"Bot ne assistant ko chat {chat_id} mein add kar diya.")
+            LOGGER.info(f"Bot added assistant to chat {chat_id}.")
             return True, ""
     except Exception as e:
         LOGGER.warning(f"Bot add_chat_members(assistant) fail: {e}")
