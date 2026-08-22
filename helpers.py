@@ -12,7 +12,7 @@ _SMALLCAPS = {
 }
 
 # Processing / "searching" ke waqt dikhne wala random emoji (sirf emoji, koi text nahi)
-PROCESSING_EMOJIS = ["🧪", "🦋", "🔍"]
+PROCESSING_EMOJIS = ["🦋", "🔍"]
 
 
 def smallcaps(text: str) -> str:
@@ -126,9 +126,9 @@ def strip_quotes(text: str) -> str:
 # ---------------------------------------------------------------------------
 # Now Playing wala decorative divider (screenshot jaisa)
 # ---------------------------------------------------------------------------
-DIVIDER = "•── ⋅ ⋅  ────── ⋅᯽⋅ ────── ⋅ ⋅ ⋅──•"
+DIVIDER = "•────────────────"
 
 
 def bullet_lines(items) -> str:
-    """Har item ko '╰┈➤ ' ke saath alag line mein deta hai."""
-    return "\n".join(f"╰┈➤ {i}" for i in items if i)
+    """Har item ko '➤ ' ke saath alag line mein deta hai."""
+    return "\n".join(f"➤ {i}" for i in items if i)

@@ -83,11 +83,11 @@ async def _is_group_admin(client, chat_id: int, user_id: int) -> bool:
         return False
 
 
-ADMIN_ONLY_TEXT = f"❌ {smallcaps_title('sirf group admin ya owner hi is command ko use kar sakte hain')}."
+ADMIN_ONLY_TEXT = f"❌ {smallcaps_title('This only Owner and Admin')}."
 
 NOT_YOUR_REQUEST_TEXT = (
-    f"❌ {smallcaps_title('yeh aapka request nahi hai')}!\n"
-    f"{smallcaps_title('sirf jisne yeh gaana request kiya hai, ya group ke admin/owner hi ise control kar sakte hain')}."
+    f"❌ {smallcaps_title('It’s Not Your Request ')}!\n"
+    f"{smallcaps_title('Control only song requester And Owner/admin')}."
 )
 
 
@@ -105,10 +105,10 @@ async def _can_control(client, chat_id: int, user_id: int) -> bool:
 
 
 ASSISTANT_NOT_JOINED_TEXT = (
-    f"❌ **{smallcaps_title('mera assistant account is group mein nahi hai')}!**\n\n"
-    f"{smallcaps_title('music bajane ke liye assistant account ka group mein hona zaroori hai')}.\n"
-    f"👉 @{config.ASSISTANT_USERNAME} {smallcaps_title('ko group mein add karo, ya isse group join karwao')}.\n\n"
-    f"{smallcaps_title('phir dobara')} `/play` {smallcaps_title('karo')}."
+    f"❌ **{smallcaps_title('assistant's account is Not in group')}!**\n\n"
+    f"{smallcaps_title('play Music Assistant must in group')}.\n"
+    f"👉 @{config.ASSISTANT_USERNAME} {smallcaps_title('first add this assistant in group')}.\n\n"
+    f"{smallcaps_title('And Again')} `/play` {smallcaps_title('use')}."
 )
 
 ASSISTANT_FLOOD_TEXT = (
@@ -297,15 +297,15 @@ async def _edit_body(cq_message, text: str, reply_markup):
 
 HELP_TEXT = (
     "🦋 **ᴀᴠᴀɪʟᴀʙʟᴇ ᴄᴏᴍᴍᴀɴᴅs**\n\n"
-    "`/play <song>` — gaana bajao ya queue mein daalo\n"
-    "`/skip` — agla gaana _(admin only)_\n"
-    "`/pause` — pause karo _(admin only)_\n"
-    "`/resume` — resume karo _(admin only)_\n"
-    "`/stop` — band karo _(admin only)_\n"
-    "`/reload` — bot ko refresh karo _(admin only)_\n"
-    "⏪ -10s / +10s ⏩ — gaana peeche/aage karo _(admin ya requester)_\n"
-    "⚙️ ʙᴏᴛ sᴇᴛᴛɪɴɢs — autoplay on/off karo _(admin ya requester)_\n"
-    "`/id` — apni/group ki ID dekho"
+    "`/play <song>` — song play command\n"
+    "`/skip` — skip song _(admin only)_\n"
+    "`/pause` — pause song _(admin only)_\n"
+    "`/resume` — resume song _(admin only)_\n"
+    "`/stop` — stop song _(admin only)_\n"
+    "`/reload` — bot refresh _(admin only)_\n"
+    "⏪ -10s / +10s ⏩ — _(admin or requester)_\n"
+    "⚙️ ʙᴏᴛ sᴇᴛᴛɪɴɢs — autoplay on/off_(admin or requester)_\n"
+    "`/id` — check your group id"
 )
 
 
@@ -316,19 +316,19 @@ def _welcome_text(user_name: str, user_id: int, bot_name: str, bot_username: str
     # tap karke expand hota hai aur andar hi scroll hota hai. Text style same hai.
     body = (
         f"🦋 ᴡᴇʟᴄᴏᴍᴇ ᴛᴏ {bot_tag}\n"
-        f"『 ᴘʀᴇᴍɪᴜᴍ ✧ ᴀᴅ-ꜰʀᴇᴇ ✧ ᴜʟᴛʀᴀ sᴍᴏᴏᴛʜ 』\n\n"
+        f"ᴘʀᴇᴍɪᴜᴍ  ᴀᴅ-ꜰʀᴇᴇ ✧ ᴜʟᴛʀᴀ sᴍᴏᴏᴛʜ\n\n"
         f"🦋 ʜɪɢʜ • Qᴜᴀʟɪᴛʏ • ᴍᴜsɪᴄ • ʙᴏᴛ\n"
         f"ғᴏʀ ᴛᴇʟᴇɢʀᴀᴍ ɢʀᴏᴜᴘs & ᴄʜᴀɴɴᴇʟs\n\n"
-        f"🦋✦ ɪɴsᴛᴀɴᴛ sᴛʀᴇᴀᴍɪɴɢ\n"
-        f"🦋✦ ᴜʟᴛʀᴀ sᴍᴏᴏᴛʜ ᴘʟᴀʏʙᴀᴄᴋ\n"
-        f"🦋✦ ᴄʀʏsᴛᴀʟ ᴄʟᴇᴀʀ sᴏᴜɴᴅ • ɴᴏ ʟᴀɢ\n\n"
-        f"🦋✦ ᴛᴀᴘ ʜᴇʟᴘ ᴛᴏ ᴠɪᴇᴡ ᴀʟʟ ᴄᴏᴍᴍᴀɴᴅs\n\n"
+        f"🦋 ɪɴsᴛᴀɴᴛ sᴛʀᴇᴀᴍɪɴɢ\n"
+        f"🦋 ᴜʟᴛʀᴀ sᴍᴏᴏᴛʜ ᴘʟᴀʏʙᴀᴄᴋ\n"
+        f"🦋 ᴄʀʏsᴛᴀʟ ᴄʟᴇᴀʀ sᴏᴜɴᴅ • ɴᴏ ʟᴀɢ\n\n"
+        f"🦋 ᴛᴀᴘ ʜᴇʟᴘ ᴛᴏ ᴠɪᴇᴡ ᴀʟʟ ᴄᴏᴍᴍᴀɴᴅs\n\n"
         f"🦋ᴘᴏᴡᴇʀᴇᴅ ʙʏ : [Aᴅɪᴛʏᴀ × Aᴘɪꜱ](https://t.me/AdityaXzexxyAPI)\n\n"
-        f"╭───────────── ✦ ─────────────╮\n"
-        f"❖ ᴇɴᴊᴏʏ ᴛʜᴇ ᴍᴜsɪᴄ ❖\n"
-        f"╰───────────── ✦ ─────────────╯"
+        f"╭─────────────  ─────────────╮\n"
+        f" ᴇɴᴊᴏʏ ᴛʜᴇ ᴍᴜsɪᴄ\n"
+        f"╰─────────────  ─────────────╯"
     )
-    return f"🦋 ʜᴇʏ {user_tag}..!! ✦\n\n" + expandable_quote(body)
+    return f"🦋 ʜᴇʏ {user_tag}..!!!\n\n" + expandable_quote(body)
 
 
 
@@ -336,14 +336,13 @@ def _group_start_text(bot_name: str) -> str:
     """Group mein /start ka message — music bot ke kaam ki quick info ke saath."""
     return f"✨ {fancy_italic(bot_name)} ɪs ᴏɴʟɪɴᴇ ᴀɴᴅ ʀᴇᴀᴅʏ ✨\n\n" + expandable_quote(
         "🎧 ᴍᴜsɪᴄ ᴘᴀɴᴇʟ\n"
-        "╰┈➤ /play <sᴏɴɢ ɴᴀᴍᴇ> — ɢᴀᴀɴᴀ ʙᴀᴊᴀᴏ\n"
-        "╰┈➤ /skip • /pause • /resume • /stop\n"
-        "╰┈➤ /queue — ᴀɢʟᴇ ɢᴀᴀɴᴏɴ ᴋɪ ʟɪsᴛ\n"
-        "╰┈➤ /autoplayon • /autoplayoff\n\n"
-        "⌾ sᴇᴇᴋ : ɴᴏᴡ ᴘʟᴀʏɪɴɢ ᴘᴀɴᴇʟ sᴇ -10s / +10s\n"
+        "➤ /play <sᴏɴɢ ɴᴀᴍᴇ> — ɢᴀᴀɴᴀ ʙᴀᴊᴀᴏ\n"
+        "➤ /skip • /pause • /resume • /stop\n"
+        "➤ /queue — ᴀɢʟᴇ ɢᴀᴀɴᴏɴ ᴋɪ ʟɪsᴛ\n"
+        "➤ /autoplayon • /autoplayoff\n\n"
         "⌾ ᴄᴏɴᴛʀᴏʟ : ᴀᴅᴍɪɴs ᴀɴᴅ ʀᴇǫᴜᴇsᴛᴇʀ ᴏɴʟʏ\n"
         "⌾ ǫᴜᴀʟɪᴛʏ : ʜɪɢʜ ᴅᴇғɪɴɪᴛɪᴏɴ ᴀᴜᴅɪᴏ\n\n"
-        "•── ⋅ ⋅  ────── ⋅᯽⋅ ────── ⋅ ⋅ ⋅──•"
+        "•────────────────"
     )
 
 
@@ -380,7 +379,7 @@ async def start_cmd(client, message: Message):
         try:
             await bot.send_message(
                 config.OWNER_ID,
-                f"👤 Bot use kiya:\n"
+                f"👤 Bot user:\n"
                 f"Name: {message.from_user.first_name}\n"
                 f"Username: @{message.from_user.username}\n"
                 f"ID: `{message.from_user.id}`",
@@ -434,7 +433,7 @@ async def added_to_group(client, message: Message):
 async def play_command(client, message: Message):
     if len(message.command) < 2:
         return await message.reply_text(
-            f"❌ {smallcaps_title('gaane ka naam bhi likho')}!\nExample: `/play Aaj Ki Raat`"
+            f"❌ {smallcaps_title('Enter Song name')}!\nExample: `/play star boy`"
         )
 
     query = message.text.split(None, 1)[1]
@@ -454,12 +453,13 @@ async def play_command(client, message: Message):
 
     track = await search_track(query)
     if not track:
-        return await status.edit_text(f"❌ {smallcaps_title('kuch nahi mila, doosra naam try karo')}.")
+        return await status.edit_text(f"❌ {smallcaps_title('nothing searched Try another name 
+        ')}.")
 
     # Naya API gaana download karke deta hai — thoda time lagta hai, isliye
     # yahan tab tak wait hota hai jab tak gaana ready na ho (max 3 minute).
     try:
-        await status.edit_text(f"⏳ {smallcaps_title('gaana download ho raha hai, thoda ruko')}...")
+        await status.edit_text(f"⏳ {smallcaps_title('SONG DOWNLOADiNG')}...")
     except Exception:
         pass
 
@@ -469,7 +469,7 @@ async def play_command(client, message: Message):
         LOGGER.error(f"Stream URL error: {e}")
         return await status.edit_text(
             f"❌ {smallcaps_title('download error')} — "
-            f"{smallcaps_title('gaana load nahi ho paya, thodi der baad try karo ya koi aur gaana bhejo')}."
+            f"{smallcaps_title('Song Loading Error 🔴')}."
         )
 
 
@@ -500,10 +500,10 @@ async def _start_playing(chat_id: int, track: dict, message: Message):
             await call_py.join_group_call(chat_id, AudioPiped(track["stream_url"]))
         except NoActiveGroupCall:
             return await message.reply_text(
-                f"❌ **{smallcaps_title('voice chat active nahi hai')}!**\n\n"
-                f"{smallcaps_title('pehle group mein voice chat start karo')}:\n"
+                f"❌ **{smallcaps_title('voice chat is not active')}!**\n\n"
+                f"{smallcaps_title('first start a voice chat on group')}:\n"
                 "Group Settings → Voice Chat → Start Voice Chat\n\n"
-                f"{smallcaps_title('phir')} `/play` {smallcaps_title('dobara bhejo')}."
+                f"{smallcaps_title('than')} `/play` {smallcaps_title('send Again')}."
             )
         except Exception as e:
             if _is_peer_error(e):
@@ -513,8 +513,8 @@ async def _start_playing(chat_id: int, track: dict, message: Message):
             except Exception as e2:
                 LOGGER.error(f"Play error: {e2}")
                 return await message.reply_text(
-                    f"❌ **{smallcaps_title('play nahi ho paya')}**\n\n"
-                    f"{smallcaps_title('voice chat active hai ya nahi ek baar check kar lo, phir dobara try karo')}."
+                    f"❌ **{smallcaps_title('play error')}**\n\n"
+                    f"{smallcaps_title('voice chat active or not check Please')}."
                 )
 
         q.set_now_playing(chat_id, track)
@@ -522,7 +522,7 @@ async def _start_playing(chat_id: int, track: dict, message: Message):
 
     except Exception as e:
         LOGGER.error(f"_start_playing fatal error: {e}")
-        await message.reply_text(f"❌ {smallcaps_title('kuch gadbad ho gayi, dobara try karo')}.")
+        await message.reply_text(f"❌ {smallcaps_title('Something Wrong')}.")
 
 
 def _now_playing_caption(track: dict) -> str:
@@ -532,13 +532,13 @@ def _now_playing_caption(track: dict) -> str:
         artists = [track.get("requested_by", "Unknown")]
 
     body = (
-        f"» 『 {smallcaps_title(track['title'])} 』\n"
+        f" {smallcaps_title(track['title'])}\n"
         f"{bullet_lines(smallcaps_title(a) for a in artists)}\n\n"
-        f"⌾ {smallcaps_title('duration')} : {track['duration']}\n"
-        f"⌾ {smallcaps_title('by')} : {track.get('requested_by', 'Unknown')}\n\n"
+        f"◽ {smallcaps_title('duration')} : {track['duration']}\n"
+        f"◽ {smallcaps_title('by')} : {track.get('requested_by', 'Unknown')}\n\n"
         f"{DIVIDER}"
     )
-    return f"❖ {smallcaps_title('Now Playing')}..!! ✦\n\n" + expandable_quote(body)
+    return f"🎧 {smallcaps_title('NOW PLAYING')}..!!! \n\n" + expandable_quote(body)
 
 
 async def _send_now_playing(chat_id: int, track: dict, message: Message = None, edit_message: Message = None):
@@ -562,7 +562,7 @@ async def _send_now_playing(chat_id: int, track: dict, message: Message = None, 
             else:
                 sent = await edit_message.edit_text(caption, reply_markup=markup, disable_web_page_preview=True)
         except Exception as e:
-            LOGGER.warning(f"Now playing in-place edit fail, naya message bhej rahe hain: {e}")
+            LOGGER.warning(f"Now playing in-place edit fail, new message sending: {e}")
 
     if sent is None:
         try:
@@ -718,7 +718,7 @@ async def skip_command(client, message: Message):
             await call_py.join_group_call(chat_id, AudioPiped(next_track["stream_url"]))
         except Exception as e2:
             LOGGER.error(f"Skip error: {e2}")
-            return await message.reply_text(f"❌ {smallcaps_title('skip nahi ho paya, dobara try karo')}.")
+            return await message.reply_text(f"❌ {smallcaps_title('skip error try Again')}.")
 
     q.set_now_playing(chat_id, next_track)
     await _send_now_playing(chat_id, next_track, message)
@@ -783,7 +783,7 @@ async def reload_command(client, message: Message):
         await message.reply_text(f"✅ {smallcaps_title('reloaded successfully')}.")
     else:
         await message.reply_text(
-            f"❌ {smallcaps_title('mujhe pehle group admin banao, phir')} `/reload` {smallcaps_title('karo')}."
+            f"❌ {smallcaps_title('first add me group admin then')} `/reload` {smallcaps_title('use')}."
         )
 
 
