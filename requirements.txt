@@ -1,3 +1,4 @@
+pyrogram
 tgcrypto==1.2.5
 py-tgcalls
 yt-dlp>=2024.08.01
